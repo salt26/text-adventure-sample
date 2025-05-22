@@ -147,6 +147,14 @@ public class DialogManager : MonoBehaviour
         {
             bool isNameUIActive = false;
             characters[i].image.color = characterColors[i];
+            if (Mathf.Approximately(characters[i].image.color.a, 0))
+            {
+                characters[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                characters[i].gameObject.SetActive(true);
+            }
             if (speakerId == characters[i].Id)
             {
                 if (characters[i].EmotionToSprite != null && characters[i].EmotionToSprite.TryGetValue(speakerEmotion, out Sprite sprite))

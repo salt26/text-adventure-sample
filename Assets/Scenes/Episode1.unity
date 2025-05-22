@@ -339,8 +339,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC774 \uD14D\uC2A4\uD2B8\uAC00 \uBCF4\uC778\uB2E4\uBA74 Console \uCC3D\uC5D0
-    \uC624\uB958\uAC00 \uC5C6\uB294\uC9C0 \uC0B4\uD3B4\uBCF4\uC2DC\uAE30 \uBC14\uB78D\uB2C8\uB2E4."
+  m_text: "\uC2E4\uD589\uD558\uACE0 \uB098\uC11C\uB3C4 \uC774 \uD14D\uC2A4\uD2B8\uAC00
+    \uBCF4\uC778\uB2E4\uBA74 Console \uCC3D\uC5D0 \uC624\uB958\uAC00 \uC5C6\uB294\uC9C0
+    \uC0B4\uD3B4\uBCF4\uC2DC\uAE30 \uBC14\uB78D\uB2C8\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 648015787a0293e42ac4bd86e5d0fca1, type: 2}
   m_sharedMaterial: {fileID: 5037562126233645974, guid: 648015787a0293e42ac4bd86e5d0fca1, type: 2}

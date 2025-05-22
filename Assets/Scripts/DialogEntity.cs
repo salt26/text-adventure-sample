@@ -57,13 +57,13 @@ public class DialogEntity
     {
         if (DialogKey == null)
         {
-            Debug.Log(ToString());
+            //Debug.Log(ToString());
             return;
         }
         DialogKey = DialogKey.Trim('"').Replace('/', '\n');
         if (!HasChoice)
         {
-            Debug.Log(ToString());
+            //Debug.Log(ToString());
             return;
         }
         Choices = new List<ChoiceData>();
@@ -73,7 +73,7 @@ public class DialogEntity
         Choices.Add(new ChoiceData(Button1NameKey, Button1NextDialogId));
         if (string.IsNullOrEmpty(Button2NameKey)) return;
         Choices.Add(new ChoiceData(Button2NameKey, Button2NextDialogId));
-        Debug.Log(ToString());
+        //Debug.Log(ToString());
     }
 
     public override string ToString()
