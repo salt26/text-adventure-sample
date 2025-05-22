@@ -47,7 +47,7 @@ public class DialogEntity : ScriptableObject
 
     public override string ToString()
     {
-        var sb = ZString.CreateStringBuilder();
+        using var sb = ZString.CreateStringBuilder(true);
         sb.Append("ID: ");
         sb.AppendLine(Id);
         sb.Append("Background ID: ");
@@ -57,6 +57,7 @@ public class DialogEntity : ScriptableObject
         {
             sb.Append(color.ToString());
         }
+
         sb.AppendLine(']');
         sb.Append("Speaker ID: ");
         sb.AppendLine(SpeakerId);
@@ -79,8 +80,7 @@ public class DialogEntity : ScriptableObject
             sb.Append("NextDialog ID: ");
             sb.AppendLine(NextDialogId);
         }
-        string ret = sb.ToString();
-        sb.Dispose();
-        return ret;
+
+        return sb.ToString();
     }
 }
