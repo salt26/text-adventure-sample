@@ -69,6 +69,14 @@ public class DialogManager : MonoBehaviour
             // 선택지가 없는 대사인 경우에 한해 다음 대사로 넘어간다.
             NextDialog();
         }
+        else if (Input.GetKey(KeyCode.Escape))
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
     }
 
     /// <summary>
