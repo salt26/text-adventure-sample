@@ -14,10 +14,11 @@ public static class CsvReader
         Dictionary<int, FieldInfo> fields = new Dictionary<int, FieldInfo>();
         Dictionary<int, Func<string, object>> typeConverter = new();
         List<DialogEntity> dialogEntities = new List<DialogEntity>();
+        csvText = csvText.Replace("\r\n", "\n").Replace("\r", "\n");
         
         foreach (var line in csvText.Split('\n'))
         {
-            string l = line.Trim(); // 줄바꿈에 있을 수 있는 '\r' 제거
+            string l = line.Trim('\r'); // 줄바꿈에 있을 수 있는 '\r' 제거
             string[] tokens;
             if (isFirstLine)
             {
@@ -124,6 +125,10 @@ public static class CsvReader
             
             // 세 번째 줄부터 진짜 데이터
             tokens = l.Split(delimiter);
+            
+            // 읽기가 끝났으면 종료
+            if (tokens.Length == 0 || !int.TryParse(tokens[0], out _)) break;
+            
             DialogEntity dialogEntity = ScriptableObject.CreateInstance<DialogEntity>();
             for (int i = 0; i < tokens.Length; i++)
             {
@@ -135,20 +140,7 @@ public static class CsvReader
 
                 try
                 {
-                    /*
-                    switch (header[i])
-                    {
-                        case "Id":
-                            dialogEntity.Id = int.Parse(tokens[i]);
-                            break;
-                        case "BackgroundId":
-                            dialogEntity.BackgroundId = int.Parse(tokens[i]);
-                            break;
-                        case "CharacterId":
-                            dialogEntity.CharacterId = int.Parse(tokens[i]);
-                            break;
-                    }
-                    */
+                    // Reflection을 사용해 DialogEntity의 해당 필드를 헤더에 있는 필드명으로부터 자동으로 찾아 여기에 값 대입 
                     fields[i].SetValue(dialogEntity, Convert.ChangeType(typeConverter[i](tokens[i].Trim()), fields[i].FieldType));
                 }
                 catch (Exception e)
@@ -156,6 +148,7 @@ public static class CsvReader
                     Debug.LogError(e);
                 }
             }
+            dialogEntity.Initialize();
             dialogEntities.Add(dialogEntity);
         }
         return dialogEntities;
