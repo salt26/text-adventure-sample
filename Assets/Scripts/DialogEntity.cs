@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class DialogEntity : ScriptableObject
 {
+    /// 대사 번호
     public int Id;
+    
+    /// 배경 번호
     public int BackgroundId;
+    
+    /// 캐릭터들에게 덧입힐 색상 목록
     public List<Color> CharactersColor;
+    
+    /// 화자 캐릭터 번호
     public int SpeakerId;
+    
+    /// 화자 이름 (표시될 이름입니다. 캐릭터 고유 이름과 다를 수 있습니다.)
     public string SpeakerName;
+    
+    /// 화자의 감정 상태 (화자 모습에 영향을 줍니다.)
     public Character.Emotion SpeakerEmotion;
+    
+    /// 대사 텍스트
     public string DialogKey;
+    
+    /// 다음 대사 번호 (선택지가 없는 경우에만 사용, 선택지가 있으면 -1)
     public int NextDialogId;
+    
+    /// 선택지 유무
     public bool HasChoice;
+    
+    /// 선택지 목록
     public List<ChoiceData> Choices;
 
     [HideInInspector] public string Button0NameKey;

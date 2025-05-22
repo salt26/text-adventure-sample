@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,11 +10,20 @@ public class ChoiceButton : MonoBehaviour
     
     public TextMeshProUGUI text;
 
-    [HideInInspector] public int nextDialog;
+    private int _nextDialogId;
+    private Action<int> _setDialog;
 
-    public void Initialize(ChoiceData data)
+    public void Initialize(ChoiceData data, Action<int> setDialog)
     {
-        nextDialog = data.NextDialogId;
+        _nextDialogId = data.NextDialogId;
         text.text = data.NameKey;
+        _setDialog = setDialog;
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(OnClick);
+    }
+
+    private void OnClick()
+    {
+        _setDialog?.Invoke(_nextDialogId);
     }
 }

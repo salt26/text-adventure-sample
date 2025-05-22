@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Text;
 using TMPro;
+using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour
@@ -16,8 +14,9 @@ public class DialogManager : MonoBehaviour
     public List<ChoiceButton> choiceButtons;
 
     [SerializeField] private TextAsset dialogData;
+
+    [SerializeField, ReadOnly] private List<DialogEntity> dialogs;
     
-    [SerializeField]
     private Dictionary<int, DialogEntity> dialogEntities;
 
     private int currentDialogId;
@@ -26,39 +25,52 @@ public class DialogManager : MonoBehaviour
     {
         if (!dialogData) return;
 
-        var dialogs = dialogData.text.ToDialogs();
+        // Dialog.csv 파일을 읽어서 대사를 불러온다.
+        dialogs = dialogData.text.ToDialogs();
         dialogEntities = new Dictionary<int, DialogEntity>();
         foreach (var dialog in dialogs)
         {
             dialogEntities.Add(dialog.Id, dialog);
         }
+        
+        // 첫 대사 실행
         SetDialog(0);
     }
 
     private void Update()
     {
+        // 마우스 왼쪽 클릭을 하거나 키보드의 Space, Enter, 아래 화살표 또는 오른쪽 화살표를 누른 경우
         if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Return) ||
             Input.GetKey(KeyCode.DownArrow) ||  Input.GetKey(KeyCode.RightArrow))
         {
+            // 선택지가 없는 대사인 경우에 한해 다음 대사로 넘어간다.
             NextDialog();
         }
     }
 
+    /// <summary>
+    /// 대사, 배경, 캐릭터, 선택지를 주어진 대사 번호의 것으로 설정합니다.
+    /// </summary>
+    /// <param name="dialogId">대사 번호</param>
     public void SetDialog(int dialogId)
     {
+        // 대사를 불러오지 않았거나 다음 대사가 없으면(dialogId == -1) 아무 것도 하지 않습니다.
         if (dialogEntities == null || dialogEntities.Count == 0 || dialogId < 0) return;
         
         currentDialogId = dialogId;
         if (dialogEntities.TryGetValue(dialogId, out DialogEntity d))
         {
-            // 대화를 찾았으면
+            // 대화를 찾았으면 배경, 캐릭터, 대사, 선택지를 적절히 설정해줍니다.
             SetBackground(d.BackgroundId);
             SetCharacters(d.CharactersColor, d.SpeakerId, d.SpeakerName, d.SpeakerEmotion);
             SetDialogText(d.DialogKey);
             if (d.HasChoice)
             {
-                SetChoices();
-                choiceButtonParent.gameObject.SetActive(true);
+                SetChoices(d.Choices);
+            }
+            else
+            {
+                choiceButtonParent.gameObject.SetActive(false);
             }
         }
         else
@@ -68,6 +80,9 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 선택지가 있는 대사에서는 다음으로 넘어가지지 않습니다.
+    /// </summary>
     public void NextDialog()
     {
         if (dialogEntities == null) return;
@@ -80,6 +95,10 @@ public class DialogManager : MonoBehaviour
         SetDialog(nextDialogId);
     }
 
+    /// <summary>
+    /// 배경을 설정합니다.
+    /// </summary>
+    /// <param name="backgroundId">배경 번호 (0부터 시작)</param>
     private void SetBackground(int backgroundId)
     {
         for (int i = 0; i < backgrounds.Count; i++)
@@ -89,6 +108,13 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 캐릭터를 설정합니다.
+    /// </summary>
+    /// <param name="characterColors">캐릭터들에게 덧입힐 색상 목록</param>
+    /// <param name="speakerId">화자 번호</param>
+    /// <param name="speakerName">화자 이름</param>
+    /// <param name="speakerEmotion">화자의 감정 표현 상태</param>
     private void SetCharacters(List<Color> characterColors, int speakerId, string speakerName, Character.Emotion speakerEmotion)
     {
         if (characters == null) return;
@@ -118,13 +144,43 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 대사 내용을 설정합니다.
+    /// </summary>
+    /// <param name="text">대사</param>
     private void SetDialogText(string text)
     {
         dialogText.text = text;
     }
 
-    private void SetChoices()
+    /// <summary>
+    /// 선택지를 설정합니다.
+    /// </summary>
+    /// <param name="choices">선택지 목록</param>
+    private void SetChoices(List<ChoiceData> choices)
     {
-        throw new NotImplementedException();
+        if (choices == null)
+        {
+            foreach (var t in choiceButtons)
+            {
+                t.gameObject.SetActive(false);
+            }
+            choiceButtonParent.gameObject.SetActive(false);
+
+            return;
+        }
+        for (int i = 0; i < choiceButtons.Count; i++)
+        {
+            if (choices.Count > i)
+            {
+                choiceButtons[i].Initialize(choices[i], SetDialog);
+                choiceButtons[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                choiceButtons[i].gameObject.SetActive(false);
+            }
+        }
+        choiceButtonParent.gameObject.SetActive(true);
     }
 }

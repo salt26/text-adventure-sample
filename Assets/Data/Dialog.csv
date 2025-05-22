@@ -13,7 +13,7 @@ int	int	List_Color	int	string	Enum_Emotion	string	int	bool	string	int	string	int
 10	1	[B4C2C6FF 808C90FF]	0	마린다	Default	으으어으어으어 무슨 부탁인데???/(살려줘… 나 집에 갈래….!!)	11	FALSE						
 11	1	[B4C2C6FF 808C90FF]	1	???	Default	제… 목…을... 찾…아…주…세…요…	12	FALSE						
 12	1	[B4C2C6FF 808C90FF]	0	마린다	Default	(제목? 무슨 뜻이지?)		TRUE	제목을 지어달라고?	16	모르겠고 도망가자!!	13		
-13	1	[B4C2C6FF 808C90FF]	1	마린다	Default	말하는 조각상이라니!!! 으아아악~~~~~	14	FALSE						
+13	1	[B4C2C6FF 808C90FF]	0	마린다	Default	말하는 조각상이라니!!! 으아아악~~~~~	14	FALSE						
 14	1	[B4C2C600 808C9000]	-1		Default	마린다는 물건을 학교에 두고 나왔다는 사실도 잊은 채 집으로 곧장 달려갔다.	15	FALSE						
 15	1	[FFFFFF00 39404200]	-1		Default	[The End]		TRUE	처음으로	0				
 16	1	[B4C2C6FF 808C90FF]	0	마린다	Default	"제…제목?? 이름 말하는 거야?/아, 내가 작품 제목 하나는 기가 막히게 잘 짓지!!/자, 어디 보자… 네 제목은…"	17	FALSE						
