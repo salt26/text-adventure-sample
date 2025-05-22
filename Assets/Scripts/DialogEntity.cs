@@ -5,10 +5,10 @@ public class DialogEntity : ScriptableObject
 {
     public int Id;
     public int BackgroundId;
-    public int CharacterId;
-    public string CharacterName;
-    public List<Color> CharacterColor;
-    public Character.Emotion EmotionType;
+    public List<Color> CharactersColor;
+    public int SpeakerId;
+    public string SpeakerName;
+    public Character.Emotion SpeakerEmotion;
     public string DialogKey;
     public int NextDialogId;
     public bool HasChoice;

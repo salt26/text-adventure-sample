@@ -912,6 +912,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 993981400}
+  nameUI: {fileID: 2037664088}
+  emotionalSprites:
+  - emotion: 0
+    sprite: {fileID: 21300000, guid: 33b264b5888177448a9ad6a8b24bb763, type: 3}
   _id: 1
   _name: "\uC288\uD2F8\uB80C"
 --- !u!1 &1192230101
@@ -1046,11 +1050,8 @@ MonoBehaviour:
   characters:
   - {fileID: 1299917367}
   - {fileID: 993981402}
-  names:
-  - {fileID: 7744026368102555787}
-  - {fileID: 2037664088}
   dialogText: {fileID: 438357463}
-  buttonParent: {fileID: 2134254129}
+  choiceButtonParent: {fileID: 2134254129}
   choiceButtons:
   - {fileID: 7371170633124583448}
   - {fileID: 779841022}
@@ -1145,6 +1146,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1299917365}
+  nameUI: {fileID: 7744026368102555787}
+  emotionalSprites:
+  - emotion: 0
+    sprite: {fileID: 21300000, guid: 778a773cd31571e4ba96d7d8df64b10b, type: 3}
   _id: 0
   _name: "\uB9C8\uB9B0\uB2E4"
 --- !u!1 &1305217679
