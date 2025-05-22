@@ -1,25 +1,41 @@
 using System.Collections.Generic;
 using Cysharp.Text;
 using TMPro;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour
 {
+    /// 배경 이미지 컴포넌트 목록.
+    /// 목록의 인덱스(0부터 시작하는 순서)가 배경 번호(BackgroundId)와 일치해야 합니다.
     public List<Image> backgrounds;
+    
+    /// 캐릭터 컴포넌트 목록.
+    /// 목록의 인덱스가 캐릭터 번호(SpeakerId)와 일치할 필요는 없지만, 색상 목록(CharactersColor)의 인덱스와는 일치해야 합니다. 
     public List<Character> characters;
+    
+    /// 대사 텍스트 컴포넌트
     public TextMeshProUGUI dialogText;
+    
+    /// 선택지 버튼들을 자식으로 둔 부모 게임오브젝트
     public GameObject choiceButtonParent;
+    
+    /// 선택지 버튼 컴포넌트 목록.
+    /// 최대로 등장할 수 있는 선택지 개수보다 이 목록에 있는 것이 많거나 같아야 합니다.
     public List<ChoiceButton> choiceButtons;
 
+    /// 대사 데이터가 담겨 있는 Dialog.csv를 여기에 넣습니다.
     [SerializeField] private TextAsset dialogData;
 
+    /// 플레이 중에만 보입니다.
+    /// 대사 데이터를 잘 불러왔는지 Inspector에서 확인할 수 있습니다.
     [SerializeField, ReadOnly] private List<DialogEntity> dialogs;
     
-    private Dictionary<int, DialogEntity> dialogEntities;
+    /// 불러온 대사 데이터를 사용하기 쉽게 가공하여 보관합니다.
+    private Dictionary<int, DialogEntity> _dialogEntities;
 
-    private int currentDialogId;
+    /// 현재 재생 중인 대사의 번호
+    private int _currentDialogId;
 
     private void Start()
     {
@@ -27,10 +43,10 @@ public class DialogManager : MonoBehaviour
 
         // Dialog.csv 파일을 읽어서 대사를 불러온다.
         dialogs = dialogData.text.ToDialogs();
-        dialogEntities = new Dictionary<int, DialogEntity>();
-        foreach (var dialog in dialogs)
+        _dialogEntities = new Dictionary<int, DialogEntity>();
+        foreach (DialogEntity dialog in dialogs)
         {
-            dialogEntities.Add(dialog.Id, dialog);
+            _dialogEntities.Add(dialog.Id, dialog);
         }
         
         // 첫 대사 실행
@@ -55,10 +71,10 @@ public class DialogManager : MonoBehaviour
     public void SetDialog(int dialogId)
     {
         // 대사를 불러오지 않았거나 다음 대사가 없으면(dialogId == -1) 아무 것도 하지 않습니다.
-        if (dialogEntities == null || dialogEntities.Count == 0 || dialogId < 0) return;
+        if (_dialogEntities == null || _dialogEntities.Count == 0 || dialogId < 0) return;
         
-        currentDialogId = dialogId;
-        if (dialogEntities.TryGetValue(dialogId, out DialogEntity d))
+        _currentDialogId = dialogId;
+        if (_dialogEntities.TryGetValue(dialogId, out DialogEntity d))
         {
             // 대화를 찾았으면 배경, 캐릭터, 대사, 선택지를 적절히 설정해줍니다.
             SetBackground(d.BackgroundId);
@@ -85,10 +101,10 @@ public class DialogManager : MonoBehaviour
     /// </summary>
     public void NextDialog()
     {
-        if (dialogEntities == null) return;
+        if (_dialogEntities == null) return;
 
         int nextDialogId = 0;
-        if (dialogEntities.TryGetValue(currentDialogId, out DialogEntity d))
+        if (_dialogEntities.TryGetValue(_currentDialogId, out DialogEntity d))
         {
             nextDialogId = d.NextDialogId;
         }
@@ -161,7 +177,7 @@ public class DialogManager : MonoBehaviour
     {
         if (choices == null)
         {
-            foreach (var t in choiceButtons)
+            foreach (ChoiceButton t in choiceButtons)
             {
                 t.gameObject.SetActive(false);
             }

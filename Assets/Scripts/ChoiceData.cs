@@ -4,10 +4,12 @@ using Cysharp.Text;
 [Serializable]
 public struct ChoiceData
 {
-    /// 선택지의 버튼에 표시될 텍스트 
+    /// 선택지의 버튼에 표시될 텍스트
+    [ReadOnly]
     public string NameKey;
     
     /// 선택한 후에 넘어갈 다음 대사 번호
+    [ReadOnly]
     public int NextDialogId;
 
     /// <summary>

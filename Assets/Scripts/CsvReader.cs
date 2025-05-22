@@ -24,7 +24,7 @@ public static class CsvReader
         // 서로 다른 운영체제의 줄바꿈 형식 고려
         csvText = csvText.Replace("\r\n", "\n").Replace("\r", "\n");
         
-        foreach (var line in csvText.Split('\n'))
+        foreach (string line in csvText.Split('\n'))
         {
             string l = line.Trim('\r'); // 줄바꿈에 있을 수 있는 '\r' 제거
             string[] tokens;
@@ -32,7 +32,7 @@ public static class CsvReader
             {
                 // 첫 번째 줄을 읽어 헤더로 사용합니다.
                 tokens = l.Split(delimiter);
-                for (var i = 0; i < tokens.Length; i++)
+                for (int i = 0; i < tokens.Length; i++)
                 {
                     FieldInfo fieldInfo = typeof(DialogEntity).GetField(tokens[i].Trim(), BindingFlags.Instance | BindingFlags.Public);
                     if (fieldInfo != null)
@@ -49,7 +49,7 @@ public static class CsvReader
             {
                 // 두 번째 줄을 읽어 타입 변환기를 설정합니다.
                 tokens = l.Split(delimiter);
-                for (var i = 0; i < tokens.Length; i++)
+                for (int i = 0; i < tokens.Length; i++)
                 {
                     switch (tokens[i].Trim())
                     {
@@ -72,9 +72,9 @@ public static class CsvReader
                         case "List_Color":
                             typeConverter.Add(i, str =>
                             {
-                                var colorHexes = str.TrimStart('[').TrimEnd(']').Split(' ');
+                                string[] colorHexes = str.TrimStart('[').TrimEnd(']').Split(' ');
                                 List<Color> colors = new List<Color>();
-                                foreach (var colorHex in colorHexes)
+                                foreach (string colorHex in colorHexes)
                                 {
                                     string hex = colorHex;
                                     
@@ -109,8 +109,8 @@ public static class CsvReader
                             break;
                         case "Enum_Emotion":
                             typeConverter.Add(i, str =>
-                            {
-                                var keys = Enum.GetNames(typeof(Character.Emotion));
+                            { 
+                                string[] keys = Enum.GetNames(typeof(Character.Emotion));
                                 if (keys.Contains(str) && Enum.TryParse(str, out Character.Emotion emotion))
                                 {
                                     return emotion;
@@ -137,7 +137,8 @@ public static class CsvReader
             // 읽기가 끝났으면 종료합니다. (이게 없으면 마지막 줄을 읽을 때 오류 발생)
             if (tokens.Length == 0 || !int.TryParse(tokens[0], out _)) break;
             
-            DialogEntity dialogEntity = ScriptableObject.CreateInstance<DialogEntity>();
+            //DialogEntity dialogEntity = ScriptableObject.CreateInstance<DialogEntity>();
+            DialogEntity dialogEntity = new DialogEntity();
             for (int i = 0; i < tokens.Length; i++)
             {
                 if (fields.Count <= i)
