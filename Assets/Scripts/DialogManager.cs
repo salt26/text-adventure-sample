@@ -37,6 +37,9 @@ public class DialogManager : MonoBehaviour
     /// 현재 재생 중인 대사의 번호
     private int _currentDialogId;
 
+    /// 빠른 클릭을 방지하기 위해 마지막으로 대사를 넘긴 후 몇 초가 지났는지 기억합니다.
+    private float _clickCooldown;
+
     private void Start()
     {
         if (!dialogData) return;
@@ -55,10 +58,14 @@ public class DialogManager : MonoBehaviour
 
     private void Update()
     {
+        _clickCooldown += Time.deltaTime;
         // 마우스 왼쪽 클릭을 하거나 키보드의 Space, Enter, 아래 화살표 또는 오른쪽 화살표를 누른 경우
         if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Return) ||
-            Input.GetKey(KeyCode.DownArrow) ||  Input.GetKey(KeyCode.RightArrow))
+            Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.RightArrow))
         {
+            // 0.2초 이내에는 따닥 클릭 불가
+            if (_clickCooldown < 0.2f) return;
+            
             // 선택지가 없는 대사인 경우에 한해 다음 대사로 넘어간다.
             NextDialog();
         }
@@ -94,6 +101,8 @@ public class DialogManager : MonoBehaviour
             Debug.LogError(ZString.Concat("Dialog Error: ", dialogId, "번 대화를 찾을 수 없습니다."));
             SetDialog(0);
         }
+
+        _clickCooldown = 0;
     }
 
     /// <summary>
